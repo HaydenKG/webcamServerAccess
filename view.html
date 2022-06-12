@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Basic server webcam access</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: Roboto, sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell;
+            font-size: 1.15rem;
+            transition: all .2s;
+        }
+
+        body>* {
+            margin: 5px 0px;
+        }
+
+        #webcam-stream {
+            max-width: 95%;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Server webcam access</h1>
+    <p>For a basic access of a server that has a camera for e.g. remote maintenance functionality</p>
+    <button id="camButton" onclick="startStream()">Start stream</button>
+    <img id="webcam-stream">
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        let streamOn = false;
+        let imgDisplay = document.getElementById('webcam-stream');
+        let camButton = document.getElementById("camButton");
+
+        socket.on("webcam_img", (webcam_img) => {
+            imgDisplay.src = "data:image/jpeg;base64," + webcam_img;
+            console.log("Img received");
+        })
+
+        socket.on("disconnect", () => {
+            imgDisplay.src = "";
+            setButtonText(false);
+        })
+
+        function startStream() {
+            if (!streamOn) {
+                socket.emit("start_webcam");
+                streamOn = true;
+                setButtonText(true);
+            } else {
+                socket.emit("stop_webcam");
+                streamOn = false;
+                setTimeout(() => imgDisplay.src = "", 100);
+                setButtonText(false);
+            }
+        }
+
+        function setButtonText(on) {
+            if (on) camButton.innerText = "Stop stream";
+            else camButton.innerText = "Start stream";
+        }
+    </script>
+
+</body>
+
+</html>
