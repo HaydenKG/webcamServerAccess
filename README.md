@@ -18,6 +18,7 @@ E.g.:
 
 Lenovo Laptop: 
  Pure basic: 
+```
      "-f",
         "dshow",
         "-i",
@@ -29,8 +30,9 @@ Lenovo Laptop:
         "-f",
         "pipe:1",
         "mjpeg",
-
-    Best quality:
+```
+Best quality:
+```
       "-s",
         "1280x720",
         "-f",
@@ -53,8 +55,10 @@ Lenovo Laptop:
         "-f",
         "mjpeg",
         "pipe:1"
+```
 
 Dell Laptop:
+```
     "-s",
         "1280x720",
         "-f",
@@ -79,3 +83,6 @@ Dell Laptop:
         "-f",
         "mjpeg",
         "pipe:1"
+```
+
+Sometimes it can be a struggle to format nodejs process paramter calls back to cmd execution paramters for testing. For that purpose you can use my [string-format-helper](https://haydenkg.github.io/helpertools/)
